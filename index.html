@@ -39,6 +39,10 @@ section{padding:5rem 1.25rem;min-height:100vh}.inner{max-width:1120px;margin:0 a
 .modal-wrap{position:fixed;inset:0;display:none;place-items:center;background:rgba(0,0,0,.72);z-index:40;padding:1rem}.modal-wrap.open{display:grid}.modal{width:min(520px,94vw);max-height:88vh;overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:1.2rem}.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:.8rem}.modal-title{font-family:"Bebas Neue";font-size:1.7rem;letter-spacing:2px;color:var(--green)}
 footer{text-align:center;padding:1.5rem;color:var(--faint);border-top:1px solid var(--line);background:var(--panel)}
 @media(max-width:760px){#nav{height:auto;min-height:58px;align-items:flex-start;flex-wrap:wrap;padding:.65rem 1rem}.links{order:3;width:100%;overflow:auto;padding-bottom:.2rem}section{padding-top:7.5rem}.admin-grid{grid-template-columns:1fr}.match{grid-template-columns:1fr auto 1fr}.match .btn{grid-column:1/-1}.tag{display:none}.final-teams{gap:.7rem}.hero h1{letter-spacing:5px}}
+.result-pill{font-size:.62rem;font-weight:900;letter-spacing:1.4px;text-transform:uppercase;border-radius:999px;padding:.18rem .45rem;margin-left:.35rem}
+.result-pill.win{color:#041007;background:var(--green)}
+.result-pill.loss{color:#fff;background:#e53935}
+.result-pill.draw{color:#111;background:var(--gold)}
 </style>
 </head>
 <body>
@@ -237,10 +241,49 @@ function renderTable(){
   const rs=rows();$('tableInfo').textContent=rs.length?`${rs.length} teams - top 4 qualify`:'No teams yet';
   $('tableBody').innerHTML=rs.length?rs.map((r,i)=>`<tr><td><span class="rank ${i===0?'one':i<4?'q':''}">${i+1}</span></td><td><div class="team-cell">${logo(r)}<span>${r.name}</span></div></td><td>${r.mp}</td><td>${r.w}</td><td>${r.d}</td><td>${r.l}</td><td>${r.gf}</td><td>${r.ga}</td><td>${r.gd>0?'+'+r.gd:r.gd}</td><td class="pts">${r.pts}</td></tr>`).join(''):`<tr><td colspan="10" style="padding:2rem;text-align:center;color:var(--faint)">Add teams in Admin.</td></tr>`;
 }
+function resultPill(f,name){
+  if(f.homeGoals==null)return '';
+  if(f.homeGoals===f.awayGoals)return '<span class="result-pill draw">DRAW</span>';
+  const won=(name===f.home&&f.homeGoals>f.awayGoals)||(name===f.away&&f.awayGoals>f.homeGoals);
+  return won?'<span class="result-pill win">WON</span>':'<span class="result-pill loss">LOST</span>';
+}
+
 function renderFixtures(){
-  if(!currentData.fixtures.length){$('fixturesBox').innerHTML='<div class="card" style="text-align:center;color:var(--faint)">Generate fixtures from Admin after adding teams.</div>';return}
-  const groups={};currentData.fixtures.forEach((f,i)=>{(groups[f.matchday]??=[]).push({...f,idx:i})});
-  $('fixturesBox').innerHTML=Object.keys(groups).map(Number).sort((a,b)=>a-b).map(md=>`<div class="matchday"><div class="matchday-title">Gameday ${md}</div>${groups[md].map(f=>`<div class="match"><div class="team-side">${logo(team(f.home))}<strong>${f.home}</strong></div><div><div class="tag">HOME</div><div class="score">${f.homeGoals==null?'VS':f.homeGoals+' - '+f.awayGoals}</div></div><div class="team-side away"><strong>${f.away}</strong>${logo(team(f.away))}</div><button class="btn" onclick="openResult(${f.idx})">Edit</button></div>`).join('')}</div>`).join('');
+  if(!currentData.fixtures.length){
+    $('fixturesBox').innerHTML='<div class="card" style="text-align:center;color:var(--faint)">Generate fixtures from Admin after adding teams.</div>';
+    return;
+  }
+
+  const groups={};
+  currentData.fixtures.forEach((f,i)=>{
+    (groups[f.matchday]??=[]).push({...f,idx:i});
+  });
+
+  $('fixturesBox').innerHTML=Object.keys(groups).map(Number).sort((a,b)=>a-b).map(md=>`
+    <div class="matchday">
+      <div class="matchday-title">Gameday ${md}</div>
+      ${groups[md].map(f=>`
+        <div class="match">
+          <div class="team-side">
+            ${logo(team(f.home))}
+            <strong>${f.home}</strong>
+            ${resultPill(f,f.home)}
+          </div>
+          <div>
+            <div class="tag">HOME</div>
+            <div class="score">${f.homeGoals==null?'VS':f.homeGoals+' - '+f.awayGoals}</div>
+          </div>
+          <div class="team-side away">
+            ${resultPill(f,f.away)}
+            <strong>${f.away}</strong>
+            ${logo(team(f.away))}
+          </div>
+          <button class="btn" onclick="openResult(${f.idx})">Edit</button>
+        </div>
+      `).join('')}
+    </div>
+  `).join('');
+}
 }
 function renderPlayoffs(){
   const d=currentData;function sfHtml(k,title){const sf=d.semis[k],a=team(sf.a),b=team(sf.b),l1=sf.leg1||{},l2=sf.leg2||{},has=l1.g1!=null&&l2.g1!=null,agA=(l1.g1||0)+(l2.g2||0),agB=(l1.g2||0)+(l2.g1||0),win=has?(agA>agB?sf.a:agB>agA?sf.b:'Penalties needed'):'TBD';return`<div class="card"><div class="card-title">${title}</div><div class="leg"><span>Leg 1</span><span>${logo(a)} ${sf.a||'TBD'}</span><strong>${l1.g1==null?'- : -':l1.g1+' - '+l1.g2}</strong><span>${sf.b||'TBD'} ${logo(b)}</span></div><div class="leg"><span>Leg 2</span><span>${logo(b)} ${sf.b||'TBD'}</span><strong>${l2.g1==null?'- : -':l2.g1+' - '+l2.g2}</strong><span>${sf.a||'TBD'} ${logo(a)}</span></div><div class="aggregate"><span>Aggregate ${agA} - ${agB}</span><strong>${win}</strong></div><button class="btn primary" style="width:100%;margin-top:.7rem" onclick="openSemi('${k}')">Set Score</button></div>`}
@@ -248,18 +291,84 @@ function renderPlayoffs(){
   const f=d.final,a=team(f.a),b=team(f.b);$('finalLogo1').outerHTML=f.a?finalLogoHtml(a,'finalLogo1'):'<div id="finalLogo1" class="final-logo">TBD</div>';$('finalLogo2').outerHTML=f.b?finalLogoHtml(b,'finalLogo2'):'<div id="finalLogo2" class="final-logo">TBD</div>';$('finalName1').textContent=f.a||'TBD';$('finalName2').textContent=f.b||'TBD';$('finalScore').textContent=f.score?f.score.g1+' : '+f.score.g2:'- : -';$('champBanner').style.display=d.champion?'block':'none';$('champBanner').textContent=d.champion?'CHAMPION: '+d.champion:'';
 }
 function renderAdmin(){
-  $('teamCount').textContent=currentData.teams.length;$('teamList').innerHTML=currentData.teams.length?currentData.teams.map((t,i)=>`<div class="team-row">${logo(t)}<div class="team-row-main"><div class="team-row-name">${t.name}</div><div class="team-row-player">${t.player||''}</div></div><button class="btn danger" onclick="removeTeam(${i})">Delete</button></div>`).join(''):'<div style="color:var(--faint);text-align:center;padding:1.5rem">No teams added.</div>';
-  $('generateFixturesBtn').disabled=currentData.teams.length<6;
-  $('generateFixturesBtn').textContent=currentData.teams.length<6?`Need ${6-currentData.teams.length} More Team${6-currentData.teams.length===1?'':'s'}`:'Generate Gameday Fixtures';
+  $('teamCount').textContent=currentData.teams.length;
+
+  if(!currentData.teams.length){
+    $('teamList').innerHTML='<div style="color:var(--faint);text-align:center;padding:1.5rem">No teams added this season.</div>';
+  }else{
+    $('teamList').innerHTML=currentData.teams.map((t,i)=>`
+      <div class="team-row">
+        ${logo(t)}
+        <div class="team-row-main">
+          <div class="team-row-name">${t.name}</div>
+          <div class="team-row-player">${t.player||'No player name'}</div>
+        </div>
+        <button class="btn danger" onclick="removeTeam(${i})">Delete</button>
+      </div>
+    `).join('');
+  }
+
+  const genBtn=$('generateFixturesBtn');
+  if(genBtn)genBtn.disabled=currentData.teams.length<2;
+}
 }
 function populate(){
   const opts='<option value="">Select</option>'+currentData.teams.map(t=>`<option value="${t.name}">${t.name}</option>`).join('');['sf1a','sf1b','sf2a','sf2b','statsTeam'].forEach(id=>$(id).innerHTML=opts);
   $('fixtureSelect').innerHTML='<option value="">Select fixture</option>'+currentData.fixtures.map((f,i)=>`<option value="${i}">Gameday ${f.matchday}: ${f.home} vs ${f.away}${f.homeGoals!=null?' - done':''}</option>`).join('');
 }
 function previewLogo(e){const file=e.target.files[0];if(!file)return;const r=new FileReader();r.onload=ev=>{pendingLogo=ev.target.result;$('logoPreview').src=pendingLogo;$('logoPreview').style.display='block';$('uploadText').textContent='Logo ready'};r.readAsDataURL(file)}
-function addTeam(){const name=$('teamName').value.trim(),player=$('playerName').value.trim();if(!name){msg('teamMsg','Enter team name.','err');return}let t=currentData.teams.find(x=>x.name.toLowerCase()===name.toLowerCase());if(t){t.player=player;if(pendingLogo)t.logo=pendingLogo}else{t={name,player,logo:pendingLogo};currentData.teams.push(t)}currentData.table[t.name]??={w:0,d:0,l:0,gf:0,ga:0};pendingLogo='';$('teamName').value='';$('playerName').value='';$('logoPreview').style.display='none';$('uploadText').textContent='Tap to upload logo';save();render();msg('teamMsg','Team saved.','ok')}
+function addTeam(){
+  const name=$('teamName').value.trim();
+  const player=$('playerName').value.trim();
+
+  if(!name){
+    msg('teamMsg','Enter team name.','err');
+    return;
+  }
+
+  let t=currentData.teams.find(x=>x.name.toLowerCase()===name.toLowerCase());
+
+  if(t){
+    t.player=player;
+    if(pendingLogo)t.logo=pendingLogo;
+  }else{
+    t={name,player,logo:pendingLogo};
+    currentData.teams.push(t);
+  }
+
+  currentData.table[t.name]??={w:0,d:0,l:0,gf:0,ga:0};
+
+  pendingLogo='';
+  $('teamName').value='';
+  $('playerName').value='';
+  $('logoInput').value='';
+  $('logoPreview').style.display='none';
+  $('uploadText').textContent='Tap to upload logo';
+
+  save();
+  render();
+
+  msg('teamMsg','Team saved and added to this season.','ok');
+}
 function removeTeam(i){if(!confirm('Remove this team?'))return;const [t]=currentData.teams.splice(i,1);delete currentData.table[t.name];currentData.fixtures=currentData.fixtures.filter(f=>f.home!==t.name&&f.away!==t.name);save();render()}
-function generateFixtures(){if(currentData.teams.length<6){msg('fixtureMsg','Need at least 6 teams before fixtures can be generated.','err');return}if(!confirm('Generate new fixtures and clear existing scores?'))return;currentData.fixtures=buildFixtures(currentData.teams);currentData.teams.forEach(t=>currentData.table[t.name]={w:0,d:0,l:0,gf:0,ga:0});save();render();msg('fixtureMsg',`Generated ${currentData.fixtures.length} matches.`,'ok')}
+function generateFixtures(){
+  if(currentData.teams.length<2){
+    msg('fixtureMsg','Need at least 2 teams before fixtures can be generated.','err');
+    return;
+  }
+
+  if(!confirm('Generate new fixtures and clear existing scores?'))return;
+
+  currentData.fixtures=buildFixtures(currentData.teams);
+  currentData.teams.forEach(t=>{
+    currentData.table[t.name]={w:0,d:0,l:0,gf:0,ga:0};
+  });
+
+  save();
+  render();
+
+  msg('fixtureMsg',`Generated ${currentData.fixtures.length} matches.`,'ok');
+}
 function openResult(i=''){$('resultModal').classList.add('open');populate();if(i!==''){$('fixtureSelect').value=i;loadFixtureForm()}}
 function loadFixtureForm(){const f=currentData.fixtures[$('fixtureSelect').value];$('homeGoals').value=f&&f.homeGoals!=null?f.homeGoals:'';$('awayGoals').value=f&&f.awayGoals!=null?f.awayGoals:''}
 function apply(home,away,g1,g2,mul=1){let h=currentData.table[home],a=currentData.table[away];h.gf+=g1*mul;h.ga+=g2*mul;a.gf+=g2*mul;a.ga+=g1*mul;if(g1>g2){h.w+=mul;a.l+=mul}else if(g2>g1){a.w+=mul;h.l+=mul}else{h.d+=mul;a.d+=mul}}
