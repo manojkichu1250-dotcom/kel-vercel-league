@@ -1,6 +1,6 @@
 import { del, list, put } from '@vercel/blob';
 
-const DATA_ROOT = 'kel-data';
+const DATA_ROOT = 'kel-data-fresh';
 
 function cleanSeason(season) {
   return String(season || '').replace(/[^0-9]/g, '');
