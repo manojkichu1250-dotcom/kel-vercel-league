@@ -1,7 +1,0 @@
-{
-  "functions": {
-    "api/kel-data.js": {
-      "maxDuration": 10
-    }
-  }
-}
