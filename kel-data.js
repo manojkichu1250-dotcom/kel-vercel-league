@@ -1,4 +1,4 @@
-import { kv } from '@vercel/kv';
+import { put, list } from '@vercel/blob';
 
 function seasonKey(season) {
   const clean = String(season || '').replace(/[^0-9]/g, '');
