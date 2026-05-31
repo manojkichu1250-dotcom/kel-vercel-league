@@ -199,17 +199,14 @@ footer{text-align:center;padding:1.5rem;color:var(--faint);border-top:1px solid 
 
 <script>
 const SEASON_LABELS=['','THE BATTLE BEGINS','THE RISE CONTINUES','LEGENDS CLASH','THE ELITE ERA','THE GRAND FINALE'];
-const S1_TEAMS=[
-  {name:'Real Madrid',player:'Arjun',logo:''},{name:'Barcelona',player:'Nikhil',logo:''},{name:'Man City',player:'Roshan',logo:''},
-  {name:'Bayern Munich',player:'Akhil',logo:''},{name:'Liverpool',player:'Sanjay',logo:''},{name:'PSG',player:'Vishnu',logo:''}
-];
+const S1_TEAMS=[];
 const API_BASE='/api/kel-data';
 let currentSeason=1,currentData=null,pendingLogo='',editingSemi='';
 const $=id=>document.getElementById(id);
-const key=s=>'kel_s'+s;
+const key=s=>'kel_fresh_s'+s;
 function initials(name){return (name||'TBD').split(/\s+/).map(x=>x[0]||'').join('').slice(0,3).toUpperCase()}
 function emptySeason(s){return{season:s,teams:[],fixtures:[],table:{},semis:{sf1:{a:'',b:'',leg1:null,leg2:null},sf2:{a:'',b:'',leg1:null,leg2:null}},final:{a:'',b:'',score:null},champion:'',championLogo:''}}
-function seasonOne(){const d=emptySeason(1);d.teams=S1_TEAMS.map(t=>({...t}));d.teams.forEach(t=>d.table[t.name]={w:0,d:0,l:0,gf:0,ga:0});d.fixtures=buildFixtures(d.teams);return d}
+function seasonOne(){return emptySeason(1)}
 function localData(s){const raw=localStorage.getItem(key(s));if(raw){try{return JSON.parse(raw)}catch(e){}}const d=s==1?seasonOne():emptySeason(s);localStorage.setItem(key(s),JSON.stringify(d));return d}
 function setStatus(text,cloud=false){$('storageStatus').textContent=text;$('storageStatus').className='storage-pill'+(cloud?' cloud':'')}
 async function cloudGet(s){if(!API_BASE)return null;const r=await fetch(API_BASE+'?season='+s,{cache:'no-store'});if(!r.ok)throw new Error('Load failed');return(await r.json()).data}
@@ -231,7 +228,10 @@ function render(){renderHero();renderTable();renderFixtures();renderPlayoffs();r
 function renderHero(){
   const prev=currentSeason>1?localData(currentSeason-1):currentData;const champ=prev.champion||currentData.champion||'TBD';const ct=prev.teams.find(t=>t.name===champ)||team(champ);
   $('champName').textContent=champ;$('champPlayer').textContent=ct.player?ct.player:'';$('champLogo').outerHTML=ct.logo?`<img id="champLogo" class="champion-logo" src="${ct.logo}" alt="">`:`<div id="champLogo" class="champion-logo">${initials(champ)}</div>`;
-  const list=(currentData.teams.length?currentData.teams:S1_TEAMS);$('teamsParade').innerHTML=[...list,...list].map(t=>`<div class="parade-item">${logo(t,'team-logo')}<div class="parade-name">${t.name}</div></div>`).join('');
+const list=currentData.teams;
+$('teamsParade').innerHTML=list.length
+  ? [...list,...list].map(t=>`<div class="parade-item">${logo(t,'team-logo')}<div class="parade-name">${t.name}</div></div>`).join('')
+  : '<div style="color:var(--faint);font-weight:900;letter-spacing:2px;padding:1rem">NO TEAMS ADDED THIS SEASON</div>';
 }
 function renderTable(){
   const rs=rows();$('tableInfo').textContent=rs.length?`${rs.length} teams - top 4 qualify`:'No teams yet';
