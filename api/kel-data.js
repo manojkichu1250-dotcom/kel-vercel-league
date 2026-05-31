@@ -1,8 +1,28 @@
-import { kv } from '@vercel/kv';
+import { put, list } from '@vercel/blob';
 
-function seasonKey(season) {
-  const clean = String(season || '').replace(/[^0-9]/g, '');
-  return clean ? `kel:season:${clean}` : '';
+function cleanSeason(season) {
+  return String(season || '').replace(/[^0-9]/g, '');
+}
+
+function blobPath(season) {
+  const clean = cleanSeason(season);
+  return clean ? `kel-data/season-${clean}.json` : '';
+}
+
+async function readJsonBlob(path) {
+  const found = await list({ prefix: path, limit: 1 });
+
+  if (!found.blobs || found.blobs.length === 0) {
+    return null;
+  }
+
+  const response = await fetch(found.blobs[0].url, { cache: 'no-store' });
+
+  if (!response.ok) {
+    return null;
+  }
+
+  return response.json();
 }
 
 export default async function handler(req, res) {
@@ -16,17 +36,27 @@ export default async function handler(req, res) {
 
   try {
     if (req.method === 'GET') {
-      const key = seasonKey(req.query.season);
-      if (!key) return res.status(400).json({ error: 'Missing season' });
-      const data = await kv.get(key);
-      return res.status(200).json({ data: data || null });
+      const path = blobPath(req.query.season);
+      if (!path) return res.status(400).json({ error: 'Missing season' });
+
+      const data = await readJsonBlob(path);
+      return res.status(200).json({ data });
     }
 
     if (req.method === 'POST') {
       const { season, data } = req.body || {};
-      const key = seasonKey(season);
-      if (!key || !data) return res.status(400).json({ error: 'Missing season or data' });
-      await kv.set(key, data);
+      const path = blobPath(season);
+
+      if (!path || !data) {
+        return res.status(400).json({ error: 'Missing season or data' });
+      }
+
+      await put(path, JSON.stringify(data), {
+        access: 'public',
+        contentType: 'application/json',
+        addRandomSuffix: false
+      });
+
       return res.status(200).json({ ok: true });
     }
 
