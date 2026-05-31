@@ -230,12 +230,22 @@ function finalLogoHtml(t,id){return t&&t.logo?`<img id="${id}" class="final-logo
 function team(name){return currentData.teams.find(t=>t.name===name)||{name,logo:'',player:''}}
 function render(){renderHero();renderTable();renderFixtures();renderPlayoffs();renderAdmin();populate();$('footerSeason').textContent='SEASON '+currentSeason;$('seasonBadge').textContent='SEASON '+currentSeason+' - '+SEASON_LABELS[currentSeason]}
 function renderHero(){
-  const prev=currentSeason>1?localData(currentSeason-1):currentData;const champ=prev.champion||currentData.champion||'TBD';const ct=prev.teams.find(t=>t.name===champ)||team(champ);
-  $('champName').textContent=champ;$('champPlayer').textContent=ct.player?ct.player:'';$('champLogo').outerHTML=ct.logo?`<img id="champLogo" class="champion-logo" src="${ct.logo}" alt="">`:`<div id="champLogo" class="champion-logo">${initials(champ)}</div>`;
-const list=currentData.teams;
-$('teamsParade').innerHTML=list.length
-  ? [...list,...list].map(t=>`<div class="parade-item">${logo(t,'team-logo')}<div class="parade-name">${t.name}</div></div>`).join('')
-  : '<div style="color:var(--faint);font-weight:900;letter-spacing:2px;padding:1rem">NO TEAMS ADDED THIS SEASON</div>';
+function renderHero(){
+  const prev=currentSeason>1?localData(currentSeason-1):currentData;
+  const champ=prev.champion||'TBD';
+  const ct=prev.teams.find(t=>t.name===champ)||{name:champ,logo:prev.championLogo||'',player:''};
+
+  $('champName').textContent=champ;
+  $('champPlayer').textContent=ct.player?ct.player:'';
+  $('champLogo').outerHTML=ct.logo
+    ? `<img id="champLogo" class="champion-logo" src="${ct.logo}" alt="">`
+    : `<div id="champLogo" class="champion-logo">${initials(champ)}</div>`;
+
+  const list=currentData.teams;
+  $('teamsParade').innerHTML=list.length
+    ? [...list,...list].map(t=>`<div class="parade-item">${logo(t,'team-logo')}<div class="parade-name">${t.name}</div></div>`).join('')
+    : '<div style="color:var(--faint);font-weight:900;letter-spacing:2px;padding:1rem">NO TEAMS ADDED THIS SEASON</div>';
+}
 }
 function renderTable(){
   const rs=rows();$('tableInfo').textContent=rs.length?`${rs.length} teams - top 4 qualify`:'No teams yet';
