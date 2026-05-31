@@ -1,0 +1,24 @@
+# KEL Kanam eFootball League
+
+This is the multi-season, Vercel-ready league site.
+
+## Included
+
+- Season selector from Season 1 to Season 5
+- Season 1 seeded with the existing interface teams
+- Team name, player name and logo upload/update
+- Dynamic league table for any number of uploaded teams
+- Gameday fixture generator where every team plays every other team twice, home and away
+- Top 4 playoff setup
+- Two-leg semifinals with aggregate winner
+- Single final page that stays the same for every season
+- Vercel KV storage through `/api/kel-data`
+
+## Deploy
+
+1. Upload this folder to GitHub or import it directly into Vercel.
+2. Add Vercel KV storage to the project from the Vercel dashboard.
+3. Deploy the project.
+4. When opened on the Vercel URL, the data badge changes to `VERCEL` after sync.
+
+Opening `index.html` directly still works, but data is only saved in that browser until the site is deployed.
