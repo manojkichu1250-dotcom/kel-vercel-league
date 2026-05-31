@@ -13,7 +13,6 @@ function seasonPrefix(season) {
 
 async function readJsonBody(req) {
   if (req.body && typeof req.body === 'object') return req.body;
-
   const chunks = [];
   for await (const chunk of req) chunks.push(chunk);
   const raw = Buffer.concat(chunks).toString('utf8');
@@ -24,10 +23,8 @@ async function getLatestSeasonData(season) {
   const prefix = seasonPrefix(season);
   if (!prefix) return null;
 
-  const { blobs } = await list({
-  prefix,
-  limit: 1000,
-});
+  const { blobs } = await list({ prefix, limit: 1000 });
+
   const latest = blobs
     .filter((blob) => blob.pathname.endsWith('.json'))
     .sort((a, b) => new Date(b.uploadedAt || 0) - new Date(a.uploadedAt || 0))[0];
@@ -44,18 +41,17 @@ async function saveSeasonData(season, data) {
   if (!prefix) throw new Error('Missing season');
 
   const pathname = `${prefix}${Date.now()}.json`;
+
   const blob = await put(pathname, JSON.stringify(data), {
     access: 'public',
     contentType: 'application/json',
     addRandomSuffix: false,
     allowOverwrite: true,
-    cacheControlMaxAge: 60
+    cacheControlMaxAge: 60,
   });
 
-  const { blobs } = await list({
-  prefix,
-  limit: 1000,
-});
+  // Clean up old blobs, keep only the 5 most recent
+  const { blobs } = await list({ prefix, limit: 1000 });
   const oldBlobs = blobs
     .filter((item) => item.pathname.endsWith('.json') && item.pathname !== blob.pathname)
     .sort((a, b) => new Date(b.uploadedAt || 0) - new Date(a.uploadedAt || 0))
