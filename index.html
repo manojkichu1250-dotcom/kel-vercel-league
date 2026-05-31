@@ -203,7 +203,7 @@ const S1_TEAMS=[
   {name:'Real Madrid',player:'Arjun',logo:''},{name:'Barcelona',player:'Nikhil',logo:''},{name:'Man City',player:'Roshan',logo:''},
   {name:'Bayern Munich',player:'Akhil',logo:''},{name:'Liverpool',player:'Sanjay',logo:''},{name:'PSG',player:'Vishnu',logo:''}
 ];
-const API_BASE=window.KEL_API_BASE||((location.protocol==='http:'||location.protocol==='https:')&&!['localhost','127.0.0.1',''].includes(location.hostname)?'/api/kel-data':'');
+const API_BASE='/api/kel-data';
 let currentSeason=1,currentData=null,pendingLogo='',editingSemi='';
 const $=id=>document.getElementById(id);
 const key=s=>'kel_s'+s;
