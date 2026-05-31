@@ -57,7 +57,6 @@ storeId: process.env.BLOB_READ_WRITE_TOKEN_STORE_ID,
   const { blobs } = await list({
   prefix,
   limit: 1000,
-  storeId: process.env.BLOB_READ_WRITE_TOKEN_STORE_ID
 });
   const oldBlobs = blobs
     .filter((item) => item.pathname.endsWith('.json') && item.pathname !== blob.pathname)
