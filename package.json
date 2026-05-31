@@ -4,6 +4,6 @@
     "deploy": "vercel --prod"
   },
   "dependencies": {
-    "@vercel/kv": "latest"
+    "@vercel/blob": "latest"
   }
 }
