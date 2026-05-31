@@ -27,7 +27,6 @@ async function getLatestSeasonData(season) {
   const { blobs } = await list({
   prefix,
   limit: 1000,
-  storeId: process.env.BLOB_READ_WRITE_TOKEN_STORE_ID
 });
   const latest = blobs
     .filter((blob) => blob.pathname.endsWith('.json'))
@@ -47,7 +46,6 @@ async function saveSeasonData(season, data) {
   const pathname = `${prefix}${Date.now()}.json`;
   const blob = await put(pathname, JSON.stringify(data), {
     access: 'public',
-storeId: process.env.BLOB_READ_WRITE_TOKEN_STORE_ID,
     contentType: 'application/json',
     addRandomSuffix: false,
     allowOverwrite: true,
