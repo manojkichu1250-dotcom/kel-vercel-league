@@ -24,7 +24,11 @@ async function getLatestSeasonData(season) {
   const prefix = seasonPrefix(season);
   if (!prefix) return null;
 
-  const { blobs } = await list({ prefix, limit: 1000 });
+  const { blobs } = await list({
+  prefix,
+  limit: 1000,
+  storeId: process.env.BLOB_READ_WRITE_TOKEN_STORE_ID
+});
   const latest = blobs
     .filter((blob) => blob.pathname.endsWith('.json'))
     .sort((a, b) => new Date(b.uploadedAt || 0) - new Date(a.uploadedAt || 0))[0];
@@ -50,7 +54,11 @@ storeId: process.env.BLOB_READ_WRITE_TOKEN_STORE_ID,
     cacheControlMaxAge: 60
   });
 
-  const { blobs } = await list({ prefix, limit: 1000 });
+  const { blobs } = await list({
+  prefix,
+  limit: 1000,
+  storeId: process.env.BLOB_READ_WRITE_TOKEN_STORE_ID
+});
   const oldBlobs = blobs
     .filter((item) => item.pathname.endsWith('.json') && item.pathname !== blob.pathname)
     .sort((a, b) => new Date(b.uploadedAt || 0) - new Date(a.uploadedAt || 0))
