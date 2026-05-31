@@ -12,13 +12,20 @@ This is the multi-season, Vercel-ready league site.
 - Top 4 playoff setup
 - Two-leg semifinals with aggregate winner
 - Single final page that stays the same for every season
-- Vercel KV storage through `/api/kel-data`
+- Vercel Blob backend storage through `/api/kel-data`
+- Delete/remove button for every team, including the base Season 1 teams
+- Fixtures locked until at least 6 teams are present
 
 ## Deploy
 
 1. Upload this folder to GitHub or import it directly into Vercel.
-2. Add Vercel KV storage to the project from the Vercel dashboard.
-3. Deploy the project.
-4. When opened on the Vercel URL, the data badge changes to `VERCEL` after sync.
+2. Add Vercel Blob storage to the project from the Vercel dashboard.
+3. Make sure the project has the `BLOB_READ_WRITE_TOKEN` environment variable. Vercel usually adds it automatically when Blob is connected.
+4. Redeploy the project.
+5. When opened on the Vercel URL, the data badge changes to `BLOB` after sync.
+
+## Important
+
+Do not use KV for this version. It uses Vercel Blob and needs `@vercel/blob` plus the `BLOB_READ_WRITE_TOKEN` environment variable.
 
 Opening `index.html` directly still works, but data is only saved in that browser until the site is deployed.

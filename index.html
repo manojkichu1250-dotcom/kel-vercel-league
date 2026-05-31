@@ -14,14 +14,14 @@
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:Rajdhani,system-ui,sans-serif}
 button,input,select{font:inherit}button{cursor:pointer}
 #nav{position:fixed;inset:0 0 auto 0;height:58px;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:0 1.4rem;background:rgba(7,16,11,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
-.brand{font-family:"Bebas Neue";font-size:1.8rem;letter-spacing:4px;color:var(--green)}
+.brand{font-family:"Bebas Neue";font-size:1.8rem;letter-spacing:4px;color:var(--green);min-width:86px}
 .links{display:flex;gap:1rem}.links a{color:var(--muted);text-decoration:none;font-weight:700;font-size:.78rem;letter-spacing:1.8px;text-transform:uppercase}.links a:hover{color:var(--green)}
 .season-tools{display:flex;align-items:center;gap:.45rem}.season-tools select,.input{background:var(--panel);border:1px solid var(--line);color:var(--text);border-radius:5px;padding:.5rem .65rem;outline:none}.season-tools select:focus,.input:focus{border-color:var(--green)}
 .storage-pill{border:1px solid var(--line);border-radius:999px;padding:.24rem .55rem;font-size:.62rem;font-weight:800;letter-spacing:1px;color:var(--gold);white-space:nowrap}.storage-pill.cloud{color:var(--green);border-color:rgba(0,230,118,.45)}
 section{padding:5rem 1.25rem;min-height:100vh}.inner{max-width:1120px;margin:0 auto}.heading{font-family:"Bebas Neue";font-size:2.7rem;letter-spacing:4px;color:var(--green);text-align:center;margin:0 0 1.6rem}
 #home{position:relative;display:grid;place-items:center;overflow:hidden;padding-top:6rem;background:radial-gradient(circle at 50% 72%,#12341b 0,#07100b 60%)}
 #home:before{content:"";position:absolute;inset:0;opacity:.09;background-image:linear-gradient(var(--green) 1px,transparent 1px),linear-gradient(90deg,var(--green) 1px,transparent 1px);background-size:58px 58px}
-.hero{position:relative;text-align:center;width:100%}.hero h1{font-family:"Bebas Neue";font-size:clamp(4.5rem,15vw,12rem);letter-spacing:9px;color:var(--green);line-height:.85;margin:0;text-shadow:0 0 55px rgba(0,230,118,.25)}
+.hero{position:relative;text-align:center;width:100%}.kel-crest{width:86px;height:86px;margin:0 auto 1rem;border:2px solid var(--green);border-radius:50%;display:grid;place-items:center;font-family:"Bebas Neue";font-size:2.25rem;letter-spacing:4px;color:var(--green);box-shadow:0 0 36px rgba(0,230,118,.22);background:rgba(0,230,118,.05)}.hero h1{font-family:"Bebas Neue";font-size:clamp(4.5rem,15vw,12rem);letter-spacing:9px;color:var(--green);line-height:.85;margin:0;text-shadow:0 0 55px rgba(0,230,118,.25)}
 .hero-sub{font-family:"Barlow Condensed";font-weight:700;letter-spacing:6px;color:var(--muted);font-size:clamp(1rem,3vw,1.8rem)}
 .badge{display:inline-block;margin:1rem 0 1.4rem;background:var(--green);color:#041007;font-weight:900;letter-spacing:2.5px;border-radius:3px;padding:.35rem 1rem}
 .champion{display:inline-flex;align-items:center;gap:1rem;border:1px solid var(--gold);background:linear-gradient(135deg,#1d2818,#0f1c11);border-radius:8px;padding:1rem 1.35rem;margin:.3rem auto 1.3rem;min-width:min(440px,92vw)}
@@ -30,7 +30,7 @@ section{padding:5rem 1.25rem;min-height:100vh}.inner{max-width:1120px;margin:0 a
 .parade-wrap{overflow:hidden;mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);margin:1rem 0}.parade{display:flex;gap:1.3rem;width:max-content;animation:parade 32s linear infinite}.parade:hover{animation-play-state:paused}@keyframes parade{to{transform:translateX(-50%)}}
 .parade-item{min-width:92px;display:grid;justify-items:center;gap:.4rem}.team-logo{width:56px;height:56px}.parade-name{font-size:.68rem;font-weight:900;letter-spacing:1.4px;color:var(--muted);text-transform:uppercase}
 #rules,#fixtures,#admin{background:var(--bg-2)}.rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.9rem}.rule,.card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:1rem}.rule-title,.card-title{font-family:"Barlow Condensed";font-weight:900;letter-spacing:1.6px;color:var(--green);text-transform:uppercase}.rule p{margin:.35rem 0 0;color:var(--muted);line-height:1.45}
-.actions{display:flex;align-items:center;gap:.7rem;flex-wrap:wrap;margin-bottom:1rem}.btn{border:1px solid var(--line);background:transparent;color:var(--muted);border-radius:5px;padding:.48rem .85rem;font-weight:900;letter-spacing:1.5px;text-transform:uppercase}.btn:hover,.btn.primary{border-color:var(--green);color:var(--green)}.btn.danger{border-color:rgba(255,82,82,.45);color:#ff9b9b}
+.actions{display:flex;align-items:center;gap:.7rem;flex-wrap:wrap;margin-bottom:1rem}.btn{border:1px solid var(--line);background:transparent;color:var(--muted);border-radius:5px;padding:.48rem .85rem;font-weight:900;letter-spacing:1.5px;text-transform:uppercase}.btn:hover,.btn.primary{border-color:var(--green);color:var(--green)}.btn:disabled{opacity:.45;cursor:not-allowed;border-color:var(--line);color:var(--faint)}.btn.danger{border-color:rgba(255,82,82,.45);color:#ff9b9b}
 .table-wrap{overflow:auto;border:1px solid var(--line);border-radius:8px}table{width:100%;border-collapse:collapse;min-width:760px}th{background:var(--panel-2);color:var(--green);font-size:.72rem;letter-spacing:1.8px;text-transform:uppercase}th,td{padding:.62rem .72rem;border-bottom:1px solid var(--line);text-align:center}td:nth-child(2),th:nth-child(2){text-align:left}.rank{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:4px;background:var(--panel-2);font-family:"Bebas Neue";font-size:1rem}.rank.q{background:var(--green);color:#06100a}.rank.one{background:var(--gold);color:#0a0a00}.team-cell{display:flex;align-items:center;gap:.55rem;font-family:"Barlow Condensed";font-weight:900;letter-spacing:1px}.sm-logo{width:28px;height:28px;font-size:.55rem}.pts{font-family:"Bebas Neue";font-size:1.15rem;color:var(--green)}
 .fixtures{display:grid;gap:1rem}.matchday{border:1px solid var(--line);border-radius:8px;overflow:hidden;background:rgba(255,255,255,.015)}.matchday-title{padding:.65rem .9rem;background:var(--panel);font-weight:900;letter-spacing:2px;color:var(--green);text-transform:uppercase}.match{display:grid;grid-template-columns:1fr auto 1fr auto;gap:.7rem;align-items:center;padding:.75rem .9rem;border-top:1px solid var(--line)}.team-side{display:flex;align-items:center;gap:.55rem}.team-side.away{justify-content:flex-end;text-align:right}.score{min-width:72px;text-align:center;font-family:"Bebas Neue";font-size:1.35rem;color:var(--green);background:var(--panel-2);border:1px solid var(--line);border-radius:5px;padding:.18rem .5rem}.tag{font-size:.62rem;color:var(--faint);font-weight:900;letter-spacing:1.2px}
 .bracket{display:grid;gap:1.1rem}.bracket-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:1rem}.leg{display:grid;grid-template-columns:70px 1fr auto 1fr;gap:.6rem;align-items:center;padding:.7rem;border-top:1px solid var(--line)}.aggregate{display:flex;justify-content:space-between;padding:.7rem;background:rgba(0,230,118,.05);color:var(--muted)}
@@ -57,6 +57,7 @@ footer{text-align:center;padding:1.5rem;color:var(--faint);border-top:1px solid 
 
 <section id="home">
   <div class="hero">
+    <div class="kel-crest">KEL</div>
     <h1>KEL</h1>
     <div class="hero-sub">KANAM EFOOTBALL LEAGUE</div>
     <div id="seasonBadge" class="badge">SEASON 1</div>
@@ -144,7 +145,7 @@ footer{text-align:center;padding:1.5rem;color:var(--faint);border-top:1px solid 
       <div class="card">
         <div class="card-title">Teams This Season (<span id="teamCount">0</span>)</div>
         <div id="teamList" class="team-list"></div>
-        <button class="btn primary" style="width:100%;margin-top:.8rem" onclick="generateFixtures()">Generate Gameday Fixtures</button>
+        <button id="generateFixturesBtn" class="btn primary" style="width:100%;margin-top:.8rem" onclick="generateFixtures()">Generate Gameday Fixtures</button>
         <div id="fixtureMsg" class="msg"></div>
       </div>
       <div class="card">
@@ -158,7 +159,7 @@ footer{text-align:center;padding:1.5rem;color:var(--faint);border-top:1px solid 
       </div>
       <div class="card">
         <div class="card-title">Vercel Data</div>
-        <p style="color:var(--muted);line-height:1.5;margin-top:.2rem">On Vercel, this app stores teams, logos, fixtures, tables and champions in Vercel KV through <strong>/api/kel-data</strong>. When opened as a local file, it uses browser storage as a backup.</p>
+        <p style="color:var(--muted);line-height:1.5;margin-top:.2rem">On Vercel, this app stores teams, logos, fixtures, tables and champions in Vercel Blob through <strong>/api/kel-data</strong>. When opened as a local file, it uses browser storage as a backup.</p>
         <button class="btn primary" style="width:100%" onclick="syncNow()">Sync Now</button>
         <div id="syncMsg" class="msg"></div>
       </div>
@@ -213,10 +214,10 @@ function localData(s){const raw=localStorage.getItem(key(s));if(raw){try{return 
 function setStatus(text,cloud=false){$('storageStatus').textContent=text;$('storageStatus').className='storage-pill'+(cloud?' cloud':'')}
 async function cloudGet(s){if(!API_BASE)return null;const r=await fetch(API_BASE+'?season='+s,{cache:'no-store'});if(!r.ok)throw new Error('Load failed');return(await r.json()).data}
 async function cloudSet(s,d){if(!API_BASE)return;const r=await fetch(API_BASE,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({season:s,data:d})});if(!r.ok)throw new Error('Save failed')}
-function save(){localStorage.setItem(key(currentSeason),JSON.stringify(currentData));if(API_BASE){setStatus('SAVING');cloudSet(currentSeason,currentData).then(()=>setStatus('VERCEL',true)).catch(()=>setStatus('OFFLINE'))}else setStatus('LOCAL')}
-async function loadSeason(s){currentSeason=+s;currentData=localData(currentSeason);render();if(!API_BASE){setStatus('LOCAL');return}try{setStatus('SYNCING');const d=await cloudGet(currentSeason);if(d){currentData=d;localStorage.setItem(key(currentSeason),JSON.stringify(d));render()}else await cloudSet(currentSeason,currentData);setStatus('VERCEL',true)}catch(e){setStatus('OFFLINE')}}
+function save(){localStorage.setItem(key(currentSeason),JSON.stringify(currentData));if(API_BASE){setStatus('SAVING');cloudSet(currentSeason,currentData).then(()=>setStatus('BLOB',true)).catch(()=>setStatus('OFFLINE'))}else setStatus('LOCAL')}
+async function loadSeason(s){currentSeason=+s;currentData=localData(currentSeason);render();if(!API_BASE){setStatus('LOCAL');return}try{setStatus('SYNCING');const d=await cloudGet(currentSeason);if(d){currentData=d;localStorage.setItem(key(currentSeason),JSON.stringify(d));render()}else await cloudSet(currentSeason,currentData);setStatus('BLOB',true)}catch(e){setStatus('OFFLINE')}}
 function changeSeason(s){loadSeason(s)}
-async function syncNow(){if(!API_BASE){msg('syncMsg','Deploy to Vercel to enable cloud data.','err');return}try{await cloudSet(currentSeason,currentData);setStatus('VERCEL',true);msg('syncMsg','Season synced to Vercel.','ok')}catch(e){msg('syncMsg','Sync failed. Check Vercel KV.','err')}}
+async function syncNow(){if(!API_BASE){msg('syncMsg','Deploy to Vercel to enable Blob data.','err');return}try{await cloudSet(currentSeason,currentData);setStatus('BLOB',true);msg('syncMsg','Season synced to Vercel Blob.','ok')}catch(e){msg('syncMsg','Sync failed. Check Vercel Blob and BLOB_READ_WRITE_TOKEN.','err')}}
 function buildFixtures(teams){
   const names=teams.map(t=>t.name);if(names.length<2)return[];const arr=names.length%2?[...names,null]:[...names];const rounds=arr.length-1,fx=[];
   for(let leg=0;leg<2;leg++){let rot=[...arr];for(let r=0;r<rounds;r++){const md=leg*rounds+r+1;for(let i=0;i<rot.length/2;i++){let a=rot[i],b=rot[rot.length-1-i];if(!a||!b)continue;if(r%2)[a,b]=[b,a];if(leg)[a,b]=[b,a];fx.push({home:a,away:b,homeGoals:null,awayGoals:null,matchday:md,leg:leg+1})}rot=[rot[0],rot[rot.length-1],...rot.slice(1,-1)]}}
@@ -247,7 +248,9 @@ function renderPlayoffs(){
   const f=d.final,a=team(f.a),b=team(f.b);$('finalLogo1').outerHTML=f.a?finalLogoHtml(a,'finalLogo1'):'<div id="finalLogo1" class="final-logo">TBD</div>';$('finalLogo2').outerHTML=f.b?finalLogoHtml(b,'finalLogo2'):'<div id="finalLogo2" class="final-logo">TBD</div>';$('finalName1').textContent=f.a||'TBD';$('finalName2').textContent=f.b||'TBD';$('finalScore').textContent=f.score?f.score.g1+' : '+f.score.g2:'- : -';$('champBanner').style.display=d.champion?'block':'none';$('champBanner').textContent=d.champion?'CHAMPION: '+d.champion:'';
 }
 function renderAdmin(){
-  $('teamCount').textContent=currentData.teams.length;$('teamList').innerHTML=currentData.teams.length?currentData.teams.map((t,i)=>`<div class="team-row">${logo(t)}<div class="team-row-main"><div class="team-row-name">${t.name}</div><div class="team-row-player">${t.player||''}</div></div><button class="btn danger" onclick="removeTeam(${i})">Remove</button></div>`).join(''):'<div style="color:var(--faint);text-align:center;padding:1.5rem">No teams added.</div>';
+  $('teamCount').textContent=currentData.teams.length;$('teamList').innerHTML=currentData.teams.length?currentData.teams.map((t,i)=>`<div class="team-row">${logo(t)}<div class="team-row-main"><div class="team-row-name">${t.name}</div><div class="team-row-player">${t.player||''}</div></div><button class="btn danger" onclick="removeTeam(${i})">Delete</button></div>`).join(''):'<div style="color:var(--faint);text-align:center;padding:1.5rem">No teams added.</div>';
+  $('generateFixturesBtn').disabled=currentData.teams.length<6;
+  $('generateFixturesBtn').textContent=currentData.teams.length<6?`Need ${6-currentData.teams.length} More Team${6-currentData.teams.length===1?'':'s'}`:'Generate Gameday Fixtures';
 }
 function populate(){
   const opts='<option value="">Select</option>'+currentData.teams.map(t=>`<option value="${t.name}">${t.name}</option>`).join('');['sf1a','sf1b','sf2a','sf2b','statsTeam'].forEach(id=>$(id).innerHTML=opts);
@@ -256,7 +259,7 @@ function populate(){
 function previewLogo(e){const file=e.target.files[0];if(!file)return;const r=new FileReader();r.onload=ev=>{pendingLogo=ev.target.result;$('logoPreview').src=pendingLogo;$('logoPreview').style.display='block';$('uploadText').textContent='Logo ready'};r.readAsDataURL(file)}
 function addTeam(){const name=$('teamName').value.trim(),player=$('playerName').value.trim();if(!name){msg('teamMsg','Enter team name.','err');return}let t=currentData.teams.find(x=>x.name.toLowerCase()===name.toLowerCase());if(t){t.player=player;if(pendingLogo)t.logo=pendingLogo}else{t={name,player,logo:pendingLogo};currentData.teams.push(t)}currentData.table[t.name]??={w:0,d:0,l:0,gf:0,ga:0};pendingLogo='';$('teamName').value='';$('playerName').value='';$('logoPreview').style.display='none';$('uploadText').textContent='Tap to upload logo';save();render();msg('teamMsg','Team saved.','ok')}
 function removeTeam(i){if(!confirm('Remove this team?'))return;const [t]=currentData.teams.splice(i,1);delete currentData.table[t.name];currentData.fixtures=currentData.fixtures.filter(f=>f.home!==t.name&&f.away!==t.name);save();render()}
-function generateFixtures(){if(currentData.teams.length<2){msg('fixtureMsg','Need at least 2 teams.','err');return}if(!confirm('Generate new fixtures and clear existing scores?'))return;currentData.fixtures=buildFixtures(currentData.teams);currentData.teams.forEach(t=>currentData.table[t.name]={w:0,d:0,l:0,gf:0,ga:0});save();render();msg('fixtureMsg',`Generated ${currentData.fixtures.length} matches.`,'ok')}
+function generateFixtures(){if(currentData.teams.length<6){msg('fixtureMsg','Need at least 6 teams before fixtures can be generated.','err');return}if(!confirm('Generate new fixtures and clear existing scores?'))return;currentData.fixtures=buildFixtures(currentData.teams);currentData.teams.forEach(t=>currentData.table[t.name]={w:0,d:0,l:0,gf:0,ga:0});save();render();msg('fixtureMsg',`Generated ${currentData.fixtures.length} matches.`,'ok')}
 function openResult(i=''){$('resultModal').classList.add('open');populate();if(i!==''){$('fixtureSelect').value=i;loadFixtureForm()}}
 function loadFixtureForm(){const f=currentData.fixtures[$('fixtureSelect').value];$('homeGoals').value=f&&f.homeGoals!=null?f.homeGoals:'';$('awayGoals').value=f&&f.awayGoals!=null?f.awayGoals:''}
 function apply(home,away,g1,g2,mul=1){let h=currentData.table[home],a=currentData.table[away];h.gf+=g1*mul;h.ga+=g2*mul;a.gf+=g2*mul;a.ga+=g1*mul;if(g1>g2){h.w+=mul;a.l+=mul}else if(g2>g1){a.w+=mul;h.l+=mul}else{h.d+=mul;a.d+=mul}}
