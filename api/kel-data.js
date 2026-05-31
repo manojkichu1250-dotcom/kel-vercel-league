@@ -1,4 +1,4 @@
-import { del, list, put } from '@vercel/blob';
+const { del, list, put } = require('@vercel/blob');
 
 const DATA_ROOT = 'kel-data-fresh';
 
@@ -26,13 +26,13 @@ async function getLatestSeasonData(season) {
   const { blobs } = await list({ prefix, limit: 1000 });
 
   const latest = blobs
-    .filter((blob) => blob.pathname.endsWith('.json'))
+    .filter((b) => b.pathname.endsWith('.json'))
     .sort((a, b) => new Date(b.uploadedAt || 0) - new Date(a.uploadedAt || 0))[0];
 
   if (!latest) return null;
 
-  const response = await fetch(`${latest.url}?t=${Date.now()}`, { cache: 'no-store' });
-  if (!response.ok) throw new Error('Could not read latest season blob');
+  const response = await fetch(`${latest.url}?t=${Date.now()}`);
+  if (!response.ok) throw new Error('Could not read blob: ' + response.status);
   return response.json();
 }
 
@@ -47,31 +47,27 @@ async function saveSeasonData(season, data) {
     contentType: 'application/json',
     addRandomSuffix: false,
     allowOverwrite: true,
-    cacheControlMaxAge: 60,
+    cacheControlMaxAge: 0,
   });
 
-  // Clean up old blobs, keep only the 5 most recent
+  // Keep only 5 most recent blobs per season, delete the rest
   const { blobs } = await list({ prefix, limit: 1000 });
-  const oldBlobs = blobs
-    .filter((item) => item.pathname.endsWith('.json') && item.pathname !== blob.pathname)
+  const old = blobs
+    .filter((b) => b.pathname.endsWith('.json') && b.pathname !== blob.pathname)
     .sort((a, b) => new Date(b.uploadedAt || 0) - new Date(a.uploadedAt || 0))
     .slice(5);
 
-  if (oldBlobs.length) {
-    await del(oldBlobs.map((item) => item.url));
-  }
+  if (old.length) await del(old.map((b) => b.url));
 
   return blob;
 }
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  if (req.method === 'OPTIONS') {
-    return res.status(204).end();
-  }
+  if (req.method === 'OPTIONS') return res.status(204).end();
 
   try {
     if (req.method === 'GET') {
@@ -82,15 +78,16 @@ export default async function handler(req, res) {
     }
 
     if (req.method === 'POST') {
-      const { season, data } = await readJsonBody(req);
-      const clean = cleanSeason(season);
-      if (!clean || !data) return res.status(400).json({ error: 'Missing season or data' });
-      const blob = await saveSeasonData(clean, data);
-      return res.status(200).json({ ok: true, blob });
+      const body = await readJsonBody(req);
+      const clean = cleanSeason(body.season);
+      if (!clean || !body.data) return res.status(400).json({ error: 'Missing season or data' });
+      const blob = await saveSeasonData(clean, body.data);
+      return res.status(200).json({ ok: true, url: blob.url });
     }
 
     return res.status(405).json({ error: 'Method not allowed' });
-  } catch (error) {
-    return res.status(500).json({ error: error.message || 'Server error' });
+  } catch (err) {
+    console.error('kel-data error:', err);
+    return res.status(500).json({ error: err.message || 'Server error' });
   }
-}
+};
